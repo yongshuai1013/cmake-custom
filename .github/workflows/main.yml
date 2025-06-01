@@ -95,9 +95,6 @@ jobs:
           - target_triple: s390x-linux-musl
             target_arch: s390x
             target_os: Linux
-          - target_triple: wasm32-wasi-musl
-            target_arch: wasm32
-            target_os: Emscripten
           - target_triple: x86-linux-musl
             target_arch: x86
             target_os: Linux
