@@ -101,6 +101,7 @@ jobs:
   build-freebsd:
     runs-on: ubuntu-24.04
     strategy:
+      fail-fast: false
       matrix:
         include:
           - target_triple: aarch64-freebsd-none
@@ -146,6 +147,7 @@ jobs:
   build-netbsd:
     runs-on: ubuntu-24.04
     strategy:
+      fail-fast: false
       matrix:
         include:
           - target_triple: aarch64-netbsd-none
@@ -209,6 +211,7 @@ jobs:
   build-windows:
     runs-on: ubuntu-24.04
     strategy:
+      fail-fast: false
       matrix:
         include:
           - target_triple: aarch64-windows-gnu
