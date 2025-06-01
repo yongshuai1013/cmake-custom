@@ -124,7 +124,7 @@ jobs:
           elif [[ "${{ matrix.target }}" == "aarch64-windows-gnu" ]]; then
             curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
             sudo ln -sf $(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/aarch64-w64-mingw32-windres /usr/bin/windres
-          elif [[ "${{ matrix.target }}" == "i686-windows-gnu" ]]; then
+          elif [[ "${{ matrix.target }}" == "x86-windows-gnu" ]]; then
             curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
             sudo ln -sf $(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/i686-w64-mingw32-windres /usr/bin/windres
           fi
