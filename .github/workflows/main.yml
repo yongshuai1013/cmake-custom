@@ -44,9 +44,6 @@ jobs:
           - target_triple: aarch64-linux-musl
             target_arch: aarch64
             target_os: Linux
-          - target_triple: aarch64-macos-none
-            target_arch: aarch64
-            target_os: Darwin
           - target_triple: aarch64-windows-gnu
             target_arch: aarch64
             target_os: Windows
@@ -107,9 +104,6 @@ jobs:
           - target_triple: x86_64-linux-muslx32
             target_arch: x86_64
             target_os: Linux
-          - target_triple: x86_64-macos-none
-            target_arch: x86_64
-            target_os: Darwin
           - target_triple: x86_64-windows-gnu
             target_arch: x86_64
             target_os: Windows
