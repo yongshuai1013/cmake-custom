@@ -6,7 +6,6 @@ if [ "$#" -ne 5 ]; then
     exit 1
 fi
 
-ZIG_VER="0.15.0-dev.137+db7db4802"
 CMAKE_VER="$1"
 NINJA_VER="$2"
 TARGET_TRIPLE="$3"
@@ -27,22 +26,12 @@ ZIG_C_FLAGS="-fsanitize=undefined -static"
 ZIG_CXX_FLAGS="$ZIG_C_FLAGS"
 ZIG_LINKER_FLAGS="-static"
 
-export PATH="$PATH:$ZIG_PATH"
 export ZIG_TARGET="$TARGET_TRIPLE"
 
 if [ -d "$INSTALL_DIR/$CMAKE_VER-$TARGET_TRIPLE" ]; then
     echo "CMake and Ninja already built for $TARGET_TRIPLE. Exiting."
     exit 0
 fi
-
-download_zig() {
-    if [ ! -d "$ZIG_PATH" ]; then
-        echo "Zig not found. Downloading..."
-        curl -LkSs "https://ziglang.org/download/$ZIG_VER/zig-x86_64-linux-$ZIG_VER.tar.xz" | tar -xJ
-    else
-        echo "Zig already exists."
-    fi
-}
 
 clone_repo() {
     local repo_url="$1"
@@ -120,7 +109,6 @@ strip_binaries() {
     done
 }
 
-download_zig
 clone_repo "https://github.com/HomuHomu833/zig-as-llvm" "main" "$TOOLCHAIN"
 clone_repo "https://github.com/Kitware/CMake.git" "v$CMAKE_VER" "$ROOT_DIR/cmake-$CMAKE_VER"
 clone_repo "https://github.com/ninja-build/ninja.git" "v$NINJA_VER" "$ROOT_DIR/ninja-$NINJA_VER"
