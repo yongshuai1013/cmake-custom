@@ -64,28 +64,45 @@ build_project() {
     local install_dir="$4"
 
     echo "Configuring $name..."
-    local extra_flags=""
+
+    local cmake_flags=(
+        -DCMAKE_CROSSCOMPILING=True
+        -DCMAKE_SYSTEM_PROCESSOR="$TARGET_ARCH"
+        -DCMAKE_SYSTEM_NAME="$TARGET_OS"
+        -DCMAKE_C_COMPILER="$ZIG_CC"
+        -DCMAKE_CXX_COMPILER="$ZIG_CXX"
+        -DCMAKE_ASM_COMPILER="$ZIG_CC"
+        -DCMAKE_LINKER="$ZIG_LD"
+        -DCMAKE_OBJCOPY="$ZIG_OBJCOPY"
+        -DCMAKE_AR="$ZIG_AR"
+        -DCMAKE_STRIP="$ZIG_STRIP"
+        -DCMAKE_C_FLAGS="$ZIG_C_FLAGS"
+        -DCMAKE_CXX_FLAGS="$ZIG_CXX_FLAGS"
+        -DCMAKE_EXE_LINKER_FLAGS="$ZIG_LINKER_FLAGS"
+        -DCMAKE_INSTALL_PREFIX="$install_dir"
+        -G Ninja
+    )
+
     if [[ "$name" == "CMake" ]]; then
-        extra_flags="-DCMAKE_USE_OPENSSL=OFF"
+        cmake_flags+=(
+            -DCMAKE_USE_OPENSSL=OFF
+            -DCMAKE_USE_SYSTEM_CURL=OFF
+            -DCMAKE_USE_SYSTEM_ZLIB=OFF
+            -DCMAKE_USE_SYSTEM_KWIML=OFF
+            -DCMAKE_USE_SYSTEM_LIBRHASH=OFF
+            -DCMAKE_USE_SYSTEM_EXPAT=OFF
+            -DCMAKE_USE_SYSTEM_BZIP2=OFF
+            -DCMAKE_USE_SYSTEM_ZSTD=OFF
+            -DCMAKE_USE_SYSTEM_LIBLZMA=OFF
+            -DCMAKE_USE_SYSTEM_LIBARCHIVE=OFF
+            -DCMAKE_USE_SYSTEM_JSONCPP=OFF
+            -DCMAKE_USE_SYSTEM_LIBUV=OFF
+            -DCMAKE_USE_SYSTEM_FORM=OFF
+            -DCMAKE_USE_SYSTEM_CPPDAP=OFF
+        )
     fi
 
-    cmake -B "$build_dir" -S "$src_dir" \
-        -DCMAKE_CROSSCOMPILING=True \
-        -DCMAKE_SYSTEM_PROCESSOR="$TARGET_ARCH" \
-        -DCMAKE_SYSTEM_NAME="$TARGET_OS" \
-        -DCMAKE_C_COMPILER="$ZIG_CC" \
-        -DCMAKE_CXX_COMPILER="$ZIG_CXX" \
-        -DCMAKE_ASM_COMPILER="$ZIG_CC" \
-        -DCMAKE_LINKER="$ZIG_LD" \
-        -DCMAKE_OBJCOPY="$ZIG_OBJCOPY" \
-        -DCMAKE_AR="$ZIG_AR" \
-        -DCMAKE_STRIP="$ZIG_STRIP" \
-        -DCMAKE_C_FLAGS="$ZIG_C_FLAGS" \
-        -DCMAKE_CXX_FLAGS="$ZIG_CXX_FLAGS" \
-        -DCMAKE_EXE_LINKER_FLAGS="$ZIG_LINKER_FLAGS" \
-        -DCMAKE_INSTALL_PREFIX="$install_dir" \
-        $extra_flags \
-        -G Ninja
+    cmake -B "$build_dir" -S "$src_dir" "${cmake_flags[@]}"
 
     echo "Building $name..."
     ninja -C "$build_dir" -j12
