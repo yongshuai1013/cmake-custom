@@ -2,6 +2,15 @@ name: CI
 
 on:
   workflow_dispatch:
+    inputs:
+      cmake_verison:
+        description: "CMake Version:"
+        default: "${{ inputs.cmake_version }}"
+        required: true
+      ninja_version:
+        description: "CMake Version:"
+        default: "${{ inputs.ninja_version }}"
+        required: true
 
 permissions:
   contents: write
@@ -77,17 +86,17 @@ jobs:
           version: "0.14.1"
           use-cache: false
       - name: Build
-        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} Linux
+        run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Linux
       - name: Compress
         run: |
-          tarball_name=cmake-${{ matrix.target_triple }}
+          tarball_name=${{ inputs.cmake_version }}
           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-          mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+          mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${tarball_name}
           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
       - name: Upload
         uses: ncipollo/release-action@v1.16.0
         with:
-          tag: "4.0.2"
+          tag: "${{ inputs.cmake_version }}"
           artifacts: ${{env.tarball_name}}.tar.xz
           allowUpdates: true
           replacesArtifacts: true
@@ -120,17 +129,17 @@ jobs:
 #           version: "0.15.0-dev.669+561ab59ce"
 #           use-cache: false
 #       - name: Build
-#         run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} FreeBSD
+#         run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} FreeBSD
 #       - name: Compress
 #         run: |
-#           tarball_name=cmake-${{ matrix.target_triple }}
+#           tarball_name=${{ inputs.cmake_version }}
 #           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-#           mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+#           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${tarball_name}
 #           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
 #       - name: Upload
 #         uses: ncipollo/release-action@v1.16.0
 #         with:
-#           tag: "4.0.2"
+#           tag: "${{ inputs.cmake_version }}"
 #           artifacts: ${{env.tarball_name}}.tar.xz
 #           allowUpdates: true
 #           replacesArtifacts: true
@@ -181,17 +190,17 @@ jobs:
 #           version: "0.15.0-dev.669+561ab59ce"
 #           use-cache: false
 #       - name: Build
-#         run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} NetBSD
+#         run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} NetBSD
 #       - name: Compres
 #         run: |
-#           tarball_name=cmake-${{ matrix.target_triple }}
+#           tarball_name=${{ inputs.cmake_version }}
 #           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-#           mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+#           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${tarball_name}
 #           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
 #       - name: Upload
 #         uses: ncipollo/release-action@v1.16.0
 #         with:
-#           tag: "4.0.2"
+#           tag: "${{ inputs.cmake_version }}"
 #           artifacts: ${{env.tarball_name}}.tar.xz
 #           allowUpdates: true
 #           replacesArtifacts: true
@@ -232,17 +241,17 @@ jobs:
           chmod +x windres
           sudo mv windres /usr/bin
       - name: Build
-        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} Windows
+        run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Windows
       - name: Compress
         run: |
-          tarball_name=cmake-${{ matrix.target_triple }}
+          tarball_name=${{ inputs.cmake_version }}
           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-          mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+          mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${tarball_name}
           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
       - name: Upload
         uses: ncipollo/release-action@v1.16.0
         with:
-          tag: "4.0.2"
+          tag: "${{ inputs.cmake_version }}"
           artifacts: ${{env.tarball_name}}.tar.xz
           allowUpdates: true
           replacesArtifacts: true
