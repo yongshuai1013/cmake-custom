@@ -26,7 +26,7 @@ jobs:
             target_arch: armel
           - target_triple: armeb-linux-musleabihf
             target_arch: armhf
-          - target_triple: hexagon-linux-musl
+          - target_triple: loongarch64-linux-musl
             target_arch: loongarch64
           - target_triple: mips-linux-musleabi
             target_arch: mips
