@@ -205,16 +205,24 @@ jobs:
         run: |
           if [[ "${{ matrix.target_triple }}" == "x86_64-windows-gnu" ]]; then
             curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
-            sudo ln -sf $(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/x86_64-w64-mingw32-windres /usr/bin/windres
+            echo "$(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/x86_64-w64-mingw32-windres $@" > windres
+            chmod +x windres
+            sudo mv windres /usr/bin
           elif [[ "${{ matrix.target_triple }}" == "aarch64-windows-gnu" ]]; then
             curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
-            sudo ln -sf $(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/aarch64-w64-mingw32-windres /usr/bin/windres
+            echo "$(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/aarch64-w64-mingw32-windres $@" > windres
+            chmod +x windres
+            sudo mv windres /usr/bin
           elif [[ "${{ matrix.target_triple }}" == "x86-windows-gnu" ]]; then
             curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
-            sudo ln -sf $(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/i686-w64-mingw32-windres /usr/bin/windres
+            echo "$(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/i686-w64-mingw32-windres $@" > windres
+            chmod +x windres
+            sudo mv windres /usr/bin
           elif [[ "${{ matrix.target_triple }}" == "thumb-windows-gnu" ]]; then
             curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
-            sudo ln -sf $(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/armv7-w64-mingw32-windres /usr/bin/windres
+            echo "$(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/armv7-w64-mingw32-windres $@" > windres
+            chmod +x windres
+            sudo mv windres /usr/bin
           fi
 
       - name: Build
