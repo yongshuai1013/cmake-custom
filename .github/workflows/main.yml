@@ -14,17 +14,128 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target_triple: aarch64-freebsd-none
+            target_arch: aarch64
+            target_os: FreeBSD
+          - target_triple: aarch64-linux-musl
+            target_arch: aarch64
+            target_os: Linux
+          - target_triple: aarch64-netbsd-none
+            target_arch: aarch64
+            target_os: NetBSD
+          - target_triple: aarch64-windows-gnu
+            target_arch: aarch64
+            target_os: Windows
+          - target_triple: aarch64_be-linux-musl
+            target_arch: aarch64_be
+            target_os: Linux
+          - target_triple: aarch64_be-netbsd-none
+            target_arch: aarch64_be
+            target_os: NetBSD
+          - target_triple: arm-freebsd-eabihf
+            target_arch: armhf
+            target_os: FreeBSD
           - target_triple: arm-linux-musleabi
             target_arch: armel
             target_os: Linux
           - target_triple: arm-linux-musleabihf
             target_arch: armhf
             target_os: Linux
+          - target_triple: arm-netbsd-eabi
+            target_arch: arm
+            target_os: NetBSD
+          - target_triple: arm-netbsd-eabihf
+            target_arch: armhf
+            target_os: NetBSD
           - target_triple: armeb-linux-musleabi
             target_arch: armel
             target_os: Linux
           - target_triple: armeb-linux-musleabihf
             target_arch: armhf
+            target_os: Linux
+          - target_triple: armeb-netbsd-eabi
+            target_arch: armeb
+            target_os: NetBSD
+          - target_triple: armeb-netbsd-eabihf
+            target_arch: armebhf
+            target_os: NetBSD
+          - target_triple: hexagon-linux-musl
+            target_arch: hexagon
+            target_os: Linux
+          - target_triple: loongarch64-linux-musl
+            target_arch: loongarch64
+            target_os: Linux
+          - target_triple: mips-linux-musleabi
+            target_arch: mips
+            target_os: Linux
+          - target_triple: mips-linux-musleabihf
+            target_arch: mips
+            target_os: Linux
+          - target_triple: mips-netbsd-eabi
+            target_arch: mips
+            target_os: NetBSD
+          - target_triple: mips-netbsd-eabihf
+            target_arch: mipshf
+            target_os: NetBSD
+          - target_triple: mipsel-linux-musleabi
+            target_arch: mipsel
+            target_os: Linux
+          - target_triple: mipsel-linux-musleabihf
+            target_arch: mipsel
+            target_os: Linux
+          - target_triple: mipsel-netbsd-eabi
+            target_arch: mipsel
+            target_os: NetBSD
+          - target_triple: mipsel-netbsd-eabihf
+            target_arch: mipselhf
+            target_os: NetBSD
+          - target_triple: mips64-linux-muslabin32
+            target_arch: mips64
+            target_os: Linux
+          - target_triple: mips64el-linux-muslabin32
+            target_arch: mips64el
+            target_os: Linux
+          - target_triple: powerpc-linux-musleabi
+            target_arch: powerpc
+            target_os: Linux
+          - target_triple: powerpc-linux-musleabihf
+            target_arch: powerpc
+            target_os: Linux
+          - target_triple: powerpc-netbsd-eabi
+            target_arch: powerpc
+            target_os: NetBSD
+          - target_triple: powerpc-netbsd-eabihf
+            target_arch: powerpchf
+            target_os: NetBSD
+          - target_triple: powerpc64-freebsd-none
+            target_arch: powerpc64
+            target_os: FreeBSD
+          - target_triple: powerpc64-linux-musl
+            target_arch: powerpc64
+            target_os: Linux
+          - target_triple: powerpc64le-freebsd-none
+            target_arch: powerpc64le
+            target_os: FreeBSD
+          - target_triple: powerpc64le-linux-musl
+            target_arch: powerpc64le
+            target_os: Linux
+          - target_triple: riscv32-linux-musl
+            target_arch: riscv32
+            target_os: Linux
+          - target_triple: riscv32-netbsd-none
+            target_arch: riscv32
+            target_os: NetBSD
+          - target_triple: riscv64-freebsd-none
+            target_arch: riscv64
+            target_os: FreeBSD
+          - target_triple: riscv64-linux-musl
+            target_arch: riscv64
+            target_os: Linux
+          - target_triple: riscv64-netbsd-none
+            target_arch: riscv64
+            target_os: NetBSD
+          - target_triple: s390x-linux-musl
+            target_arch: s390x
             target_os: Linux
           - target_triple: thumb-linux-musleabi
             target_arch: thumbel
@@ -41,69 +152,27 @@ jobs:
           - target_triple: thumb-windows-gnu
             target_arch: thumb
             target_os: Windows
-          - target_triple: aarch64-linux-musl
-            target_arch: aarch64
-            target_os: Linux
-          - target_triple: aarch64-windows-gnu
-            target_arch: aarch64
-            target_os: Windows
-          - target_triple: aarch64_be-linux-musl
-            target_arch: aarch64_be
-            target_os: Linux
-          - target_triple: loongarch64-linux-musl
-            target_arch: loongarch64
-            target_os: Linux
-          - target_triple: mips-linux-musleabi
-            target_arch: mips
-            target_os: Linux
-          - target_triple: mips-linux-musleabihf
-            target_arch: mips
-            target_os: Linux
-          - target_triple: mipsel-linux-musleabi
-            target_arch: mipsel
-            target_os: Linux
-          - target_triple: mipsel-linux-musleabihf
-            target_arch: mipsel
-            target_os: Linux
-          - target_triple: mips64-linux-muslabin32
-            target_arch: mips64
-            target_os: Linux
-          - target_triple: mips64el-linux-muslabin32
-            target_arch: mips64el
-            target_os: Linux
-          - target_triple: powerpc-linux-musleabi
-            target_arch: powerpc
-            target_os: Linux
-          - target_triple: powerpc-linux-musleabihf
-            target_arch: powerpc
-            target_os: Linux
-          - target_triple: powerpc64-linux-musl
-            target_arch: powerpc64
-            target_os: Linux
-          - target_triple: powerpc64le-linux-musl
-            target_arch: powerpc64le
-            target_os: Linux
-          - target_triple: riscv32-linux-musl
-            target_arch: riscv32
-            target_os: Linux
-          - target_triple: riscv64-linux-musl
-            target_arch: riscv64
-            target_os: Linux
-          - target_triple: s390x-linux-musl
-            target_arch: s390x
-            target_os: Linux
           - target_triple: x86-linux-musl
             target_arch: x86
             target_os: Linux
+          - target_triple: x86-netbsd-none
+            target_arch: x86
+            target_os: NetBSD
           - target_triple: x86-windows-gnu
             target_arch: x86
             target_os: Windows
+          - target_triple: x86_64-freebsd-none
+            target_arch: x86_64
+            target_os: FreeBSD
           - target_triple: x86_64-linux-musl
             target_arch: x86_64
             target_os: Linux
           - target_triple: x86_64-linux-muslx32
             target_arch: x86_64
             target_os: Linux
+          - target_triple: x86_64-netbsd-none
+            target_arch: x86_64
+            target_os: NetBSD
           - target_triple: x86_64-windows-gnu
             target_arch: x86_64
             target_os: Windows
