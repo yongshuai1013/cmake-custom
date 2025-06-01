@@ -25,6 +25,12 @@ ZIG_C_FLAGS="-fsanitize=undefined -static"
 ZIG_CXX_FLAGS="$ZIG_C_FLAGS"
 ZIG_LINKER_FLAGS="-static"
 
+if [[ "$TARGET_TRIPLE" == *freebsd* || "$TARGET_TRIPLE" == *netbsd* ]]; then
+    ZIG_C_FLAGS="${ZIG_C_FLAGS//-static/}"
+    ZIG_CXX_FLAGS="${ZIG_CXX_FLAGS//-static/}"
+    ZIG_LINKER_FLAGS="${ZIG_LINKER_FLAGS//-static/}"
+fi
+
 export ZIG_TARGET="$TARGET_TRIPLE"
 
 if [ -d "$INSTALL_DIR/$CMAKE_VER-$TARGET_TRIPLE" ]; then
