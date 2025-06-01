@@ -6,7 +6,7 @@ if [ "$#" -ne 5 ]; then
     exit 1
 fi
 
-ZIG_VER="0.14.1"
+ZIG_VER="0.15.0-dev.622+55848363f"
 CMAKE_VER="$1"
 NINJA_VER="$2"
 TARGET_TRIPLE="$3"
