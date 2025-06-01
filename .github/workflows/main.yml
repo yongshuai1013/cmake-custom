@@ -45,7 +45,7 @@ jobs:
             os: Linux
           - target_triple: aarch64-macos-none
             target_arch: aarch64
-            os: macOS
+            os: Darwin
           - target_triple: aarch64-windows-gnu
             target_arch: aarch64
             os: Windows
@@ -135,7 +135,7 @@ jobs:
             os: Linux
           - target_triple: x86_64-macos-none
             target_arch: x86_64
-            os: macOS
+            os: Darwin
           - target_triple: x86_64-windows-gnu
             target_arch: x86_64
             os: Windows
