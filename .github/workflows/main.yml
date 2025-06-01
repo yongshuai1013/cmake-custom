@@ -133,12 +133,16 @@ jobs:
         run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} ${{ matrix.target_os }}
 
       - name: Compress
-        run: exit 1
+        run: |
+          tarball_name=cmake-${{ matrix.target_triple }}
+          echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
+          mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+          tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
 
       - name: Upload release
         uses: ncipollo/release-action@v1.16.0
         with:
-          tag: "llvm-r${{inputs.version}}"
+          tag: "4.0.2"
           artifacts: ${{env.tarball_name}}.tar.xz
           allowUpdates: true
           replacesArtifacts: true
