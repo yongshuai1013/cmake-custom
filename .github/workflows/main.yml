@@ -184,6 +184,9 @@ jobs:
         id: zig_version
         run: |
           case "${{ matrix.target }}" in
+            *netbsd*|*freebsd*)
+              echo "version=0.15.0-dev.622+55848363f" >> $GITHUB_OUTPUT
+              ;;
             arm-linux-musleabihf|armeb-linux-musleabihf|thumb-linux-musleabi|thumb-linux-musleabihf|thumbeb-linux-musleabi|thumbeb-linux-musleabihf|s390x-linux-musl)
               echo "version=0.15.0-dev.137+db7db4802" >> $GITHUB_OUTPUT
               ;;
