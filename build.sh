@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-if [ "$#" -ne 4 ]; then
-    echo "Usage: $0 <CMake Version> <Ninja Version> <Target Triple> <Target Architecture>"
+if [ "$#" -ne 5 ]; then
+    echo "Usage: $0 <CMake Version> <Ninja Version> <Target Triple> <Target Architecture> <Target Operating System>"
     exit 1
 fi
 
@@ -11,6 +11,7 @@ CMAKE_VER="$1"
 NINJA_VER="$2"
 TARGET_TRIPLE="$3"
 TARGET_ARCH="$4"
+TARGET_OS="$5"
 ROOT_DIR="$(pwd)"
 BUILD_DIR="$ROOT_DIR/build"
 INSTALL_DIR="$ROOT_DIR/install"
@@ -71,7 +72,7 @@ build_project() {
     cmake -B "$build_dir" -S "$src_dir" \
         -DCMAKE_CROSSCOMPILING=True \
         -DCMAKE_SYSTEM_PROCESSOR="$TARGET_ARCH" \
-        -DCMAKE_SYSTEM_NAME=Linux \
+        -DCMAKE_SYSTEM_NAME="$TARGET_OS" \
         -DCMAKE_C_COMPILER="$ZIG_CC" \
         -DCMAKE_CXX_COMPILER="$ZIG_CXX" \
         -DCMAKE_ASM_COMPILER="$ZIG_CC" \
