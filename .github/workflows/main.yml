@@ -10,141 +10,132 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - target_triple: arc-linux-gnu
-            target_arch: arc
-            os: Linux
           - target_triple: arm-linux-musleabi
             target_arch: armel
-            os: Linux
+            target_os: Linux
           - target_triple: arm-linux-musleabihf
             target_arch: armhf
-            os: Linux
+            target_os: Linux
           - target_triple: armeb-linux-musleabi
             target_arch: armel
-            os: Linux
+            target_os: Linux
           - target_triple: armeb-linux-musleabihf
             target_arch: armhf
-            os: Linux
+            target_os: Linux
           - target_triple: thumb-linux-musleabi
             target_arch: thumbel
-            os: Linux
+            target_os: Linux
           - target_triple: thumb-linux-musleabihf
             target_arch: thumbhf
-            os: Linux
+            target_os: Linux
           - target_triple: thumbeb-linux-musleabi
             target_arch: thumbel
-            os: Linux
+            target_os: Linux
           - target_triple: thumbeb-linux-musleabihf
             target_arch: thumbhf
-            os: Linux
+            target_os: Linux
           - target_triple: thumb-windows-gnu
             target_arch: thumb
-            os: Windows
+            target_os: Windows
           - target_triple: aarch64-linux-musl
             target_arch: aarch64
-            os: Linux
+            target_os: Linux
           - target_triple: aarch64-macos-none
             target_arch: aarch64
-            os: Darwin
+            target_os: Darwin
           - target_triple: aarch64-windows-gnu
             target_arch: aarch64
-            os: Windows
+            target_os: Windows
           - target_triple: aarch64_be-linux-musl
             target_arch: aarch64_be
-            os: Linux
-          - target_triple: csky-linux-gnueabi
-            target_arch: csky
-            os: Linux
-          - target_triple: csky-linux-gnueabihf
-            target_arch: csky
-            os: Linux
+            target_os: Linux
           - target_triple: loongarch64-linux-musl
             target_arch: loongarch64
-            os: Linux
+            target_os: Linux
           - target_triple: loongarch64-linux-gnusf
             target_arch: loongarch64
-            os: Linux
+            target_os: Linux
           - target_triple: m68k-linux-musl
             target_arch: m68k
-            os: Linux
+            target_os: Linux
           - target_triple: mips-linux-musleabi
             target_arch: mips
-            os: Linux
+            target_os: Linux
           - target_triple: mips-linux-musleabihf
             target_arch: mips
-            os: Linux
+            target_os: Linux
           - target_triple: mipsel-linux-musleabi
             target_arch: mipsel
-            os: Linux
+            target_os: Linux
           - target_triple: mipsel-linux-musleabihf
             target_arch: mipsel
-            os: Linux
+            target_os: Linux
           - target_triple: mips64-linux-muslabi64
             target_arch: mips64
-            os: Linux
+            target_os: Linux
           - target_triple: mips64-linux-muslabin32
             target_arch: mips64
-            os: Linux
+            target_os: Linux
           - target_triple: mips64el-linux-muslabi64
             target_arch: mips64el
-            os: Linux
+            target_os: Linux
           - target_triple: mips64el-linux-muslabin32
             target_arch: mips64el
-            os: Linux
+            target_os: Linux
           - target_triple: powerpc-linux-musleabi
             target_arch: powerpc
-            os: Linux
+            target_os: Linux
           - target_triple: powerpc-linux-musleabihf
             target_arch: powerpc
-            os: Linux
+            target_os: Linux
           - target_triple: powerpc64-linux-musl
             target_arch: powerpc64
-            os: Linux
+            target_os: Linux
           - target_triple: powerpc64le-linux-musl
             target_arch: powerpc64le
-            os: Linux
+            target_os: Linux
           - target_triple: riscv32-linux-musl
             target_arch: riscv32
-            os: Linux
+            target_os: Linux
           - target_triple: riscv64-linux-musl
             target_arch: riscv64
-            os: Linux
+            target_os: Linux
           - target_triple: s390x-linux-musl
             target_arch: s390x
-            os: Linux
+            target_os: Linux
           - target_triple: sparc-linux-gnu
             target_arch: sparc
-            os: Linux
+            target_os: Linux
           - target_triple: sparc64-linux-gnu
             target_arch: sparc64
-            os: Linux
+            target_os: Linux
           - target_triple: wasm32-wasi-musl
             target_arch: wasm32
-            os: WASM
+            target_os: Emscripten
           - target_triple: x86-linux-musl
             target_arch: x86
-            os: Linux
+            target_os: Linux
           - target_triple: x86-windows-gnu
             target_arch: x86
-            os: Windows
+            target_os: Windows
           - target_triple: x86_64-linux-musl
             target_arch: x86_64
-            os: Linux
+            target_os: Linux
           - target_triple: x86_64-linux-muslx32
             target_arch: x86_64
-            os: Linux
+            target_os: Linux
           - target_triple: x86_64-macos-none
             target_arch: x86_64
-            os: Darwin
+            target_os: Darwin
           - target_triple: x86_64-windows-gnu
             target_arch: x86_64
-            os: Windows
+            target_os: Windows
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Build
-        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} ${{ matrix.os }}
+        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} ${{ matrix.target_os }}
 
       - name: Compress
         run: exit 1
