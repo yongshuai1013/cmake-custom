@@ -73,13 +73,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set Zig Version
-        run: echo "version=0.15.0-dev.300+9e21ba12d" >> $GITHUB_OUTPUT
-        id: zig_version
       - name: Setup Zig Toolchain
         uses: mlugg/setup-zig@v2
         with:
-          version: "${{ steps.zig_version.outputs.version }}"
+          version: "0.14.1"
           use-cache: false
       - name: Build
         run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} Linux
@@ -119,13 +116,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set Zig Version
-        run: echo "version=0.15.0-dev.669+561ab59ce" >> $GITHUB_OUTPUT
-        id: zig_version
       - name: Setup Zig Toolchain
         uses: mlugg/setup-zig@v2
         with:
-          version: "${{ steps.zig_version.outputs.version }}"
+          version: "0.15.0-dev.669+561ab59ce"
           use-cache: false
       - name: Build
         run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} FreeBSD
@@ -183,13 +177,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set Zig Version
-        run: echo "version=0.15.0-dev.669+561ab59ce" >> $GITHUB_OUTPUT
-        id: zig_version
       - name: Setup Zig Toolchain
         uses: mlugg/setup-zig@v2
         with:
-          version: "${{ steps.zig_version.outputs.version }}"
+          version: "0.15.0-dev.669+561ab59ce"
           use-cache: false
       - name: Build
         run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} NetBSD
@@ -225,13 +216,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set Zig Version
-        run: echo "version=0.15.0-dev.300+9e21ba12d" >> $GITHUB_OUTPUT
-        id: zig_version
       - name: Setup Zig Toolchain
         uses: mlugg/setup-zig@v2
         with:
-          version: "${{ steps.zig_version.outputs.version }}"
+          version: "0.15.0-dev.300+9e21ba12d"
           use-cache: false
       - name: Install MinGW Binutils
         run: |
