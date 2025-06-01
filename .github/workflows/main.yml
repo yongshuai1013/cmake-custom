@@ -52,12 +52,6 @@ jobs:
           - target_triple: loongarch64-linux-musl
             target_arch: loongarch64
             target_os: Linux
-          - target_triple: loongarch64-linux-gnusf
-            target_arch: loongarch64
-            target_os: Linux
-          - target_triple: m68k-linux-musl
-            target_arch: m68k
-            target_os: Linux
           - target_triple: mips-linux-musleabi
             target_arch: mips
             target_os: Linux
@@ -70,14 +64,8 @@ jobs:
           - target_triple: mipsel-linux-musleabihf
             target_arch: mipsel
             target_os: Linux
-          - target_triple: mips64-linux-muslabi64
-            target_arch: mips64
-            target_os: Linux
           - target_triple: mips64-linux-muslabin32
             target_arch: mips64
-            target_os: Linux
-          - target_triple: mips64el-linux-muslabi64
-            target_arch: mips64el
             target_os: Linux
           - target_triple: mips64el-linux-muslabin32
             target_arch: mips64el
@@ -103,12 +91,6 @@ jobs:
           - target_triple: s390x-linux-musl
             target_arch: s390x
             target_os: Linux
-          - target_triple: sparc-linux-gnu
-            target_arch: sparc
-            target_os: Linux
-          - target_triple: sparc64-linux-gnu
-            target_arch: sparc64
-            target_os: Linux
           - target_triple: wasm32-wasi-musl
             target_arch: wasm32
             target_os: Emscripten
@@ -133,6 +115,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install MinGW Binutils
+        if: matrix.target == 'x86_64-windows-gnu' || matrix.target == 'x86-windows-gnu'
+        run: |
+          if [[ "${{ matrix.target }}" == "x86_64-windows-gnu" ]]; then
+            sudo apt install -y binutils-mingw-w64-x86-64
+            sudo ln -sf /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
+          else
+            sudo apt install -y binutils-mingw-w64-i686
+            sudo ln -sf /usr/bin/i686-w64-mingw32-windres /usr/bin/windres
+          fi
 
       - name: Build
         run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} ${{ matrix.target_os }}
