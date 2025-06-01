@@ -27,8 +27,6 @@ jobs:
           - target_triple: armeb-linux-musleabihf
             target_arch: armhf
           - target_triple: hexagon-linux-musl
-            target_arch: hexagon
-          - target_triple: loongarch64-linux-musl
             target_arch: loongarch64
           - target_triple: mips-linux-musleabi
             target_arch: mips
@@ -95,109 +93,109 @@ jobs:
           replacesArtifacts: true
           body: ''
 
-  build-freebsd:
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - target_triple: aarch64-freebsd-none
-            target_arch: aarch64
-          - target_triple: arm-freebsd-eabihf
-            target_arch: armhf
-          - target_triple: powerpc64-freebsd-none
-            target_arch: powerpc64
-          - target_triple: powerpc64le-freebsd-none
-            target_arch: powerpc64le
-          - target_triple: riscv64-freebsd-none
-            target_arch: riscv64
-          - target_triple: x86_64-freebsd-none
-            target_arch: x86_64
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Zig Toolchain
-        uses: mlugg/setup-zig@v2
-        with:
-          version: "0.15.0-dev.669+561ab59ce"
-          use-cache: false
-      - name: Build
-        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} FreeBSD
-      - name: Compress
-        run: |
-          tarball_name=cmake-${{ matrix.target_triple }}
-          echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-          mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
-          tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
-      - name: Upload
-        uses: ncipollo/release-action@v1.16.0
-        with:
-          tag: "4.0.2"
-          artifacts: ${{env.tarball_name}}.tar.xz
-          allowUpdates: true
-          replacesArtifacts: true
-          body: ''
+#   build-freebsd:
+#     runs-on: ubuntu-24.04
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         include:
+#           - target_triple: aarch64-freebsd-none
+#             target_arch: aarch64
+#           - target_triple: arm-freebsd-eabihf
+#             target_arch: armhf
+#           - target_triple: powerpc64-freebsd-none
+#             target_arch: powerpc64
+#           - target_triple: powerpc64le-freebsd-none
+#             target_arch: powerpc64le
+#           - target_triple: riscv64-freebsd-none
+#             target_arch: riscv64
+#           - target_triple: x86_64-freebsd-none
+#             target_arch: x86_64
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+#       - name: Setup Zig Toolchain
+#         uses: mlugg/setup-zig@v2
+#         with:
+#           version: "0.15.0-dev.669+561ab59ce"
+#           use-cache: false
+#       - name: Build
+#         run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} FreeBSD
+#       - name: Compress
+#         run: |
+#           tarball_name=cmake-${{ matrix.target_triple }}
+#           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
+#           mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+#           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
+#       - name: Upload
+#         uses: ncipollo/release-action@v1.16.0
+#         with:
+#           tag: "4.0.2"
+#           artifacts: ${{env.tarball_name}}.tar.xz
+#           allowUpdates: true
+#           replacesArtifacts: true
+#           body: ''
 
-  build-netbsd:
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - target_triple: aarch64-netbsd-none
-            target_arch: aarch64
-          - target_triple: arm-netbsd-eabi
-            target_arch: arm
-          - target_triple: arm-netbsd-eabihf
-            target_arch: armhf
-          - target_triple: armeb-netbsd-eabi
-            target_arch: armeb
-          - target_triple: armeb-netbsd-eabihf
-            target_arch: armebhf
-          - target_triple: mips-netbsd-eabi
-            target_arch: mips
-          - target_triple: mips-netbsd-eabihf
-            target_arch: mipshf
-          - target_triple: mipsel-netbsd-eabi
-            target_arch: mipsel
-          - target_triple: mipsel-netbsd-eabihf
-            target_arch: mipselhf
-          - target_triple: powerpc-netbsd-eabi
-            target_arch: powerpc
-          - target_triple: powerpc-netbsd-eabihf
-            target_arch: powerpchf
-          - target_triple: riscv32-netbsd-none
-            target_arch: riscv32
-          - target_triple: riscv64-netbsd-none
-            target_arch: riscv64
-          - target_triple: x86-netbsd-none
-            target_arch: x86
-          - target_triple: x86_64-netbsd-none
-            target_arch: x86_64
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Zig Toolchain
-        uses: mlugg/setup-zig@v2
-        with:
-          version: "0.15.0-dev.669+561ab59ce"
-          use-cache: false
-      - name: Build
-        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} NetBSD
-      - name: Compres
-        run: |
-          tarball_name=cmake-${{ matrix.target_triple }}
-          echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-          mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
-          tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
-      - name: Upload
-        uses: ncipollo/release-action@v1.16.0
-        with:
-          tag: "4.0.2"
-          artifacts: ${{env.tarball_name}}.tar.xz
-          allowUpdates: true
-          replacesArtifacts: true
-          body: ''
+#   build-netbsd:
+#     runs-on: ubuntu-24.04
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         include:
+#           - target_triple: aarch64-netbsd-none
+#             target_arch: aarch64
+#           - target_triple: arm-netbsd-eabi
+#             target_arch: arm
+#           - target_triple: arm-netbsd-eabihf
+#             target_arch: armhf
+#           - target_triple: armeb-netbsd-eabi
+#             target_arch: armeb
+#           - target_triple: armeb-netbsd-eabihf
+#             target_arch: armebhf
+#           - target_triple: mips-netbsd-eabi
+#             target_arch: mips
+#           - target_triple: mips-netbsd-eabihf
+#             target_arch: mipshf
+#           - target_triple: mipsel-netbsd-eabi
+#             target_arch: mipsel
+#           - target_triple: mipsel-netbsd-eabihf
+#             target_arch: mipselhf
+#           - target_triple: powerpc-netbsd-eabi
+#             target_arch: powerpc
+#           - target_triple: powerpc-netbsd-eabihf
+#             target_arch: powerpchf
+#           - target_triple: riscv32-netbsd-none
+#             target_arch: riscv32
+#           - target_triple: riscv64-netbsd-none
+#             target_arch: riscv64
+#           - target_triple: x86-netbsd-none
+#             target_arch: x86
+#           - target_triple: x86_64-netbsd-none
+#             target_arch: x86_64
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+#       - name: Setup Zig Toolchain
+#         uses: mlugg/setup-zig@v2
+#         with:
+#           version: "0.15.0-dev.669+561ab59ce"
+#           use-cache: false
+#       - name: Build
+#         run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} NetBSD
+#       - name: Compres
+#         run: |
+#           tarball_name=cmake-${{ matrix.target_triple }}
+#           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
+#           mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+#           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
+#       - name: Upload
+#         uses: ncipollo/release-action@v1.16.0
+#         with:
+#           tag: "4.0.2"
+#           artifacts: ${{env.tarball_name}}.tar.xz
+#           allowUpdates: true
+#           replacesArtifacts: true
+#           body: ''
 
   build-windows:
     runs-on: ubuntu-24.04
