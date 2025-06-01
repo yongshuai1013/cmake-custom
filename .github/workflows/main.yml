@@ -8,234 +8,249 @@ permissions:
   actions: write
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
         include:
-          - target_triple: aarch64-freebsd-none
-            target_arch: aarch64
-            target_os: FreeBSD
           - target_triple: aarch64-linux-musl
             target_arch: aarch64
-            target_os: Linux
-          - target_triple: aarch64-netbsd-none
-            target_arch: aarch64
-            target_os: NetBSD
-          - target_triple: aarch64-windows-gnu
-            target_arch: aarch64
-            target_os: Windows
           - target_triple: aarch64_be-linux-musl
             target_arch: aarch64_be
-            target_os: Linux
-          - target_triple: aarch64_be-netbsd-none
-            target_arch: aarch64_be
-            target_os: NetBSD
-          - target_triple: arm-freebsd-eabihf
-            target_arch: armhf
-            target_os: FreeBSD
           - target_triple: arm-linux-musleabi
             target_arch: armel
-            target_os: Linux
           - target_triple: arm-linux-musleabihf
             target_arch: armhf
-            target_os: Linux
-          - target_triple: arm-netbsd-eabi
-            target_arch: arm
-            target_os: NetBSD
-          - target_triple: arm-netbsd-eabihf
-            target_arch: armhf
-            target_os: NetBSD
           - target_triple: armeb-linux-musleabi
             target_arch: armel
-            target_os: Linux
           - target_triple: armeb-linux-musleabihf
             target_arch: armhf
-            target_os: Linux
-          - target_triple: armeb-netbsd-eabi
-            target_arch: armeb
-            target_os: NetBSD
-          - target_triple: armeb-netbsd-eabihf
-            target_arch: armebhf
-            target_os: NetBSD
           - target_triple: hexagon-linux-musl
             target_arch: hexagon
-            target_os: Linux
           - target_triple: loongarch64-linux-musl
             target_arch: loongarch64
-            target_os: Linux
           - target_triple: mips-linux-musleabi
             target_arch: mips
-            target_os: Linux
           - target_triple: mips-linux-musleabihf
             target_arch: mips
-            target_os: Linux
-          - target_triple: mips-netbsd-eabi
-            target_arch: mips
-            target_os: NetBSD
-          - target_triple: mips-netbsd-eabihf
-            target_arch: mipshf
-            target_os: NetBSD
           - target_triple: mipsel-linux-musleabi
             target_arch: mipsel
-            target_os: Linux
           - target_triple: mipsel-linux-musleabihf
             target_arch: mipsel
-            target_os: Linux
-          - target_triple: mipsel-netbsd-eabi
-            target_arch: mipsel
-            target_os: NetBSD
-          - target_triple: mipsel-netbsd-eabihf
-            target_arch: mipselhf
-            target_os: NetBSD
           - target_triple: mips64-linux-muslabin32
             target_arch: mips64
-            target_os: Linux
           - target_triple: mips64el-linux-muslabin32
             target_arch: mips64el
-            target_os: Linux
           - target_triple: powerpc-linux-musleabi
             target_arch: powerpc
-            target_os: Linux
           - target_triple: powerpc-linux-musleabihf
             target_arch: powerpc
-            target_os: Linux
-          - target_triple: powerpc-netbsd-eabi
-            target_arch: powerpc
-            target_os: NetBSD
-          - target_triple: powerpc-netbsd-eabihf
-            target_arch: powerpchf
-            target_os: NetBSD
-          - target_triple: powerpc64-freebsd-none
-            target_arch: powerpc64
-            target_os: FreeBSD
           - target_triple: powerpc64-linux-musl
             target_arch: powerpc64
-            target_os: Linux
-          - target_triple: powerpc64le-freebsd-none
-            target_arch: powerpc64le
-            target_os: FreeBSD
           - target_triple: powerpc64le-linux-musl
             target_arch: powerpc64le
-            target_os: Linux
           - target_triple: riscv32-linux-musl
             target_arch: riscv32
-            target_os: Linux
-          - target_triple: riscv32-netbsd-none
-            target_arch: riscv32
-            target_os: NetBSD
-          - target_triple: riscv64-freebsd-none
-            target_arch: riscv64
-            target_os: FreeBSD
           - target_triple: riscv64-linux-musl
             target_arch: riscv64
-            target_os: Linux
-          - target_triple: riscv64-netbsd-none
-            target_arch: riscv64
-            target_os: NetBSD
           - target_triple: s390x-linux-musl
             target_arch: s390x
-            target_os: Linux
           - target_triple: thumb-linux-musleabi
             target_arch: thumbel
-            target_os: Linux
           - target_triple: thumb-linux-musleabihf
             target_arch: thumbhf
-            target_os: Linux
           - target_triple: thumbeb-linux-musleabi
             target_arch: thumbel
-            target_os: Linux
           - target_triple: thumbeb-linux-musleabihf
             target_arch: thumbhf
-            target_os: Linux
-          - target_triple: thumb-windows-gnu
-            target_arch: thumb
-            target_os: Windows
           - target_triple: x86-linux-musl
             target_arch: x86
-            target_os: Linux
-          - target_triple: x86-netbsd-none
-            target_arch: x86
-            target_os: NetBSD
-          - target_triple: x86-windows-gnu
-            target_arch: x86
-            target_os: Windows
-          - target_triple: x86_64-freebsd-none
-            target_arch: x86_64
-            target_os: FreeBSD
           - target_triple: x86_64-linux-musl
             target_arch: x86_64
-            target_os: Linux
           - target_triple: x86_64-linux-muslx32
             target_arch: x86_64
-            target_os: Linux
-          - target_triple: x86_64-netbsd-none
-            target_arch: x86_64
-            target_os: NetBSD
-          - target_triple: x86_64-windows-gnu
-            target_arch: x86_64
-            target_os: Windows
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Set Zig Version
+        run: echo "version=0.15.0-dev.300+9e21ba12d" >> $GITHUB_OUTPUT
         id: zig_version
-        run: |
-          case "${{ matrix.target_triple }}" in
-            *netbsd*|*freebsd*)
-              echo "version=0.15.0-dev.669+561ab59ce" >> $GITHUB_OUTPUT
-              ;;
-            arm-linux-musleabihf|armeb-linux-musleabihf|thumb-linux-musleabi|thumb-linux-musleabihf|thumbeb-linux-musleabi|thumbeb-linux-musleabihf|s390x-linux-musl)
-              echo "version=0.15.0-dev.137+db7db4802" >> $GITHUB_OUTPUT
-              ;;
-            *)
-              echo "version=0.15.0-dev.300+9e21ba12d" >> $GITHUB_OUTPUT
-              ;;
-          esac
-
-      - name: Setup Zig
+      - name: Setup Zig Toolchain
         uses: mlugg/setup-zig@v2
         with:
           version: "${{ steps.zig_version.outputs.version }}"
           use-cache: false
-
-      - name: Install MinGW Binutils
-        run: |
-          if [[ "${{ matrix.target_triple }}" == "x86_64-windows-gnu" ]]; then
-            curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
-            echo "$(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/x86_64-w64-mingw32-windres $@" > windres
-            chmod +x windres
-            sudo mv windres /usr/bin
-          elif [[ "${{ matrix.target_triple }}" == "aarch64-windows-gnu" ]]; then
-            curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
-            echo "$(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/aarch64-w64-mingw32-windres $@" > windres
-            chmod +x windres
-            sudo mv windres /usr/bin
-          elif [[ "${{ matrix.target_triple }}" == "x86-windows-gnu" ]]; then
-            curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
-            echo "$(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/i686-w64-mingw32-windres $@" > windres
-            chmod +x windres
-            sudo mv windres /usr/bin
-          elif [[ "${{ matrix.target_triple }}" == "thumb-windows-gnu" ]]; then
-            curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
-            echo "$(pwd)/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64/bin/armv7-w64-mingw32-windres $@" > windres
-            chmod +x windres
-            sudo mv windres /usr/bin
-          fi
-
       - name: Build
-        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} ${{ matrix.target_os }}
-
+        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} Linux
       - name: Compress
         run: |
           tarball_name=cmake-${{ matrix.target_triple }}
           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
           mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
+      - name: Upload
+        uses: ncipollo/release-action@v1.16.0
+        with:
+          tag: "4.0.2"
+          artifacts: ${{env.tarball_name}}.tar.xz
+          allowUpdates: true
+          replacesArtifacts: true
+          body: ''
 
-      - name: Upload release
+  build-freebsd:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        include:
+          - target_triple: aarch64-freebsd-none
+            target_arch: aarch64
+          - target_triple: arm-freebsd-eabihf
+            target_arch: armhf
+          - target_triple: powerpc64-freebsd-none
+            target_arch: powerpc64
+          - target_triple: powerpc64le-freebsd-none
+            target_arch: powerpc64le
+          - target_triple: riscv64-freebsd-none
+            target_arch: riscv64
+          - target_triple: x86_64-freebsd-none
+            target_arch: x86_64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set Zig Version
+        run: echo "version=0.15.0-dev.669+561ab59ce" >> $GITHUB_OUTPUT
+        id: zig_version
+      - name: Setup Zig Toolchain
+        uses: mlugg/setup-zig@v2
+        with:
+          version: "${{ steps.zig_version.outputs.version }}"
+          use-cache: false
+      - name: Build
+        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} FreeBSD
+      - name: Compress
+        run: |
+          tarball_name=cmake-${{ matrix.target_triple }}
+          echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
+          mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+          tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
+      - name: Upload
+        uses: ncipollo/release-action@v1.16.0
+        with:
+          tag: "4.0.2"
+          artifacts: ${{env.tarball_name}}.tar.xz
+          allowUpdates: true
+          replacesArtifacts: true
+          body: ''
+
+  build-netbsd:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        include:
+          - target_triple: aarch64-netbsd-none
+            target_arch: aarch64
+          - target_triple: arm-netbsd-eabi
+            target_arch: arm
+          - target_triple: arm-netbsd-eabihf
+            target_arch: armhf
+          - target_triple: armeb-netbsd-eabi
+            target_arch: armeb
+          - target_triple: armeb-netbsd-eabihf
+            target_arch: armebhf
+          - target_triple: mips-netbsd-eabi
+            target_arch: mips
+          - target_triple: mips-netbsd-eabihf
+            target_arch: mipshf
+          - target_triple: mipsel-netbsd-eabi
+            target_arch: mipsel
+          - target_triple: mipsel-netbsd-eabihf
+            target_arch: mipselhf
+          - target_triple: powerpc-netbsd-eabi
+            target_arch: powerpc
+          - target_triple: powerpc-netbsd-eabihf
+            target_arch: powerpchf
+          - target_triple: riscv32-netbsd-none
+            target_arch: riscv32
+          - target_triple: riscv64-netbsd-none
+            target_arch: riscv64
+          - target_triple: x86-netbsd-none
+            target_arch: x86
+          - target_triple: x86_64-netbsd-none
+            target_arch: x86_64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set Zig Version
+        run: echo "version=0.15.0-dev.669+561ab59ce" >> $GITHUB_OUTPUT
+        id: zig_version
+      - name: Setup Zig Toolchain
+        uses: mlugg/setup-zig@v2
+        with:
+          version: "${{ steps.zig_version.outputs.version }}"
+          use-cache: false
+      - name: Build
+        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} NetBSD
+      - name: Compres
+        run: |
+          tarball_name=cmake-${{ matrix.target_triple }}
+          echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
+          mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+          tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
+      - name: Upload
+        uses: ncipollo/release-action@v1.16.0
+        with:
+          tag: "4.0.2"
+          artifacts: ${{env.tarball_name}}.tar.xz
+          allowUpdates: true
+          replacesArtifacts: true
+          body: ''
+
+  build-windows:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        include:
+          - target_triple: aarch64-windows-gnu
+            target_arch: aarch64
+          - target_triple: x86-windows-gnu
+            target_arch: x86
+          - target_triple: x86_64-windows-gnu
+            target_arch: x86_64
+          - target_triple: thumb-windows-gnu
+            target_arch: thumb
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set Zig Version
+        run: echo "version=0.15.0-dev.300+9e21ba12d" >> $GITHUB_OUTPUT
+        id: zig_version
+      - name: Setup Zig Toolchain
+        uses: mlugg/setup-zig@v2
+        with:
+          version: "${{ steps.zig_version.outputs.version }}"
+          use-cache: false
+      - name: Install MinGW Binutils
+        run: |
+          curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
+          case "${{ matrix.target_triple }}" in
+            x86_64-windows-gnu) bin="x86_64-w64-mingw32-windres" ;;
+            aarch64-windows-gnu) bin="aarch64-w64-mingw32-windres" ;;
+            x86-windows-gnu) bin="i686-w64-mingw32-windres" ;;
+            thumb-windows-gnu) bin="armv7-w64-mingw32-windres" ;;
+          esac
+          echo "$(pwd)/llvm-mingw-*/bin/${bin} \$@" > windres
+          chmod +x windres
+          sudo mv windres /usr/bin
+      - name: Build
+        run: ./build.sh 4.0.2 1.12.1 ${{ matrix.target_triple }} ${{ matrix.target_arch }} Windows
+      - name: Compress
+        run: |
+          tarball_name=cmake-${{ matrix.target_triple }}
+          echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
+          mv install/4.0.2-${{ matrix.target_triple }} ${tarball_name}
+          tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
+      - name: Upload
         uses: ncipollo/release-action@v1.16.0
         with:
           tag: "4.0.2"
