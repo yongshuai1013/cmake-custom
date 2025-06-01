@@ -183,7 +183,7 @@ jobs:
       - name: Set Zig Version
         id: zig_version
         run: |
-          case "${{ matrix.target }}" in
+          case "${{ matrix.target_triple }}" in
             *netbsd*|*freebsd*)
               echo "version=0.15.0-dev.622+55848363f" >> $GITHUB_OUTPUT
               ;;
