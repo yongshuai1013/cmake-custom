@@ -104,7 +104,7 @@ strip_binaries() {
 }
 
 download_zig
-clone_repo "https://github.com/HomuHomu833/zig-as-llvm" "master" "$TOOLCHAIN"
+clone_repo "https://github.com/HomuHomu833/zig-as-llvm" "main" "$TOOLCHAIN"
 clone_repo "https://github.com/Kitware/CMake.git" "v$CMAKE_VER" "$ROOT_DIR/cmake-$CMAKE_VER"
 clone_repo "https://github.com/ninja-build/ninja.git" "v$NINJA_VER" "$ROOT_DIR/ninja-$NINJA_VER"
 
