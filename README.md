@@ -1,2 +1,2 @@
-# CMake for musl
-Building CMake and Ninja for musl libc.
+# CMake Zig
+Building CMake and Ninja using Zig’s LLVM backend.
