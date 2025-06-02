@@ -5,11 +5,11 @@ on:
     inputs:
       cmake_verison:
         description: "CMake Version:"
-        default: "${{ inputs.cmake_version }}"
+        default: "4.0.2"
         required: true
       ninja_version:
         description: "CMake Version:"
-        default: "${{ inputs.ninja_version }}"
+        default: "1.12.1"
         required: true
 
 permissions:
