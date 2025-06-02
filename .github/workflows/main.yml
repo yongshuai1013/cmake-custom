@@ -279,7 +279,7 @@ jobs:
       - name: Check and Build
         id: build-check
         run: |
-          if curl --head --fail --silent "https://github.com/HomuHomu833/cmake-zig/releases/download/${{ inputs.cmake_version }}/cmake-${{ matrix.target_triple }}.tar.xz"; then
+          if curl --head --fail --silent "https://github.com/HomuHomu833/cmake-zig/releases/download/${{ inputs.cmake_version }}/cmake-${{ matrix.target_triple }}.7z"; then
             echo "Artifact already exists, skipping build."
             echo "build_skipped=true" >> $GITHUB_OUTPUT
           else
