@@ -23,7 +23,7 @@ ZIG_AR="$TOOLCHAIN/bin/ar"
 ZIG_STRIP="$TOOLCHAIN/bin/strip"
 ZIG_C_FLAGS="-fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -static"
 ZIG_CXX_FLAGS="$ZIG_C_FLAGS"
-ZIG_LINKER_FLAGS="-static"
+ZIG_LINKER_FLAGS="-Wl,-z,relro,-z,now -static"
 
 if [[ "$TARGET_TRIPLE" == *freebsd* || "$TARGET_TRIPLE" == *netbsd* ]]; then
     ZIG_C_FLAGS="${ZIG_C_FLAGS//-static/}"
