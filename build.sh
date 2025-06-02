@@ -21,7 +21,7 @@ ZIG_LD="$TOOLCHAIN/bin/ld"
 ZIG_OBJCOPY="$TOOLCHAIN/bin/objcopy"
 ZIG_AR="$TOOLCHAIN/bin/ar"
 ZIG_STRIP="$TOOLCHAIN/bin/strip"
-ZIG_C_FLAGS="-Os -fstack-clash-protection -fstack-protector-strong -fsanitize=undefined -static"
+ZIG_C_FLAGS="-fstack-protector-strong -fsanitize=undefined -static"
 ZIG_CXX_FLAGS="$ZIG_C_FLAGS"
 ZIG_LINKER_FLAGS="-static"
 
