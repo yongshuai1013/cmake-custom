@@ -89,9 +89,9 @@ jobs:
         run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Linux
       - name: Compress
         run: |
-          tarball_name=${{ inputs.cmake_version }}
+          tarball_name=cmake-${{ matrix.target_triple }}
           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-          mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${tarball_name}
+          mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${{ inputs.cmake_version }}
           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
       - name: Upload
         uses: ncipollo/release-action@v1.16.0
@@ -132,9 +132,9 @@ jobs:
 #         run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} FreeBSD
 #       - name: Compress
 #         run: |
-#           tarball_name=${{ inputs.cmake_version }}
+#           tarball_name=cmake-${{ matrix.target_triple }}
 #           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-#           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${tarball_name}
+#           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${{ inputs.cmake_version }}
 #           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
 #       - name: Upload
 #         uses: ncipollo/release-action@v1.16.0
@@ -193,9 +193,9 @@ jobs:
 #         run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} NetBSD
 #       - name: Compres
 #         run: |
-#           tarball_name=${{ inputs.cmake_version }}
+#           tarball_name=cmake-${{ matrix.target_triple }}
 #           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-#           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${tarball_name}
+#           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${{ inputs.cmake_version }}
 #           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
 #       - name: Upload
 #         uses: ncipollo/release-action@v1.16.0
@@ -228,6 +228,7 @@ jobs:
         with:
           version: "0.15.0-dev.300+9e21ba12d"
           use-cache: false
+      - uses: milliewalky/setup-7-zip@v2
       - name: Install MinGW Binutils
         run: |
           curl -LkSs https://github.com/mstorsjo/llvm-mingw/releases/download/20250114/llvm-mingw-20250114-msvcrt-ubuntu-20.04-x86_64.tar.xz | xz -d | tar -x
@@ -244,15 +245,15 @@ jobs:
         run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Windows
       - name: Compress
         run: |
-          tarball_name=${{ inputs.cmake_version }}
+          tarball_name=cmake-${{ matrix.target_triple }}
           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
-          mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${tarball_name}
-          tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
+          mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${{ inputs.cmake_version }}
+          7z a -snl -t7z -mx=9 -m0=LZMA2 -md=256m -mfb=273 -mtc=on -mmt=on ${tarball_name}.7z ${{ inputs.cmake_version }}
       - name: Upload
         uses: ncipollo/release-action@v1.16.0
         with:
           tag: "${{ inputs.cmake_version }}"
-          artifacts: ${{env.tarball_name}}.tar.xz
+          artifacts: ${{env.tarball_name}}.7z
           allowUpdates: true
           replacesArtifacts: true
           body: ''
