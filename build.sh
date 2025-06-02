@@ -81,6 +81,13 @@ build_project() {
     if [[ "$name" == "CMake" ]]; then
         cmake_flags+=(
             -DBUILD_SHARED_LIBS=OFF
+            -DHAVE_POSIX_STRERROR_R=1
+            -DHAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT=""
+            -DHAVE_POLL_FINE_EXITCODE=1
+            -DKWSYS_LFS_WORKS=1
+            -DKWSYS_LFS_WORKS__TRYRUN_OUTPUT=""
+            -DHAVE_FSETXATTR_5=1
+            -DHAVE_FSETXATTR_5__TRYRUN_OUTPUT=""
             -DCMAKE_USE_OPENSSL=OFF
             -DCMAKE_USE_SYSTEM_CURL=OFF
             -DCMAKE_USE_SYSTEM_ZLIB=OFF
