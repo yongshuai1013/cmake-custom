@@ -62,6 +62,8 @@ build_project() {
     local cmake_flags=(
         -DCMAKE_CROSSCOMPILING=True
         -DCMAKE_BUILD_TYPE=MinSizeRel
+        -D_WIN32_WINNT=0x0600
+        -DNTDDI_VERSION=0x06000000
         -DCMAKE_SYSTEM_PROCESSOR="$TARGET_ARCH"
         -DCMAKE_SYSTEM_NAME="$TARGET_OS"
         -DCMAKE_C_COMPILER="$ZIG_CC"
