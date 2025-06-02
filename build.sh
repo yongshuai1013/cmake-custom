@@ -107,15 +107,6 @@ build_project() {
     ninja -C "$build_dir" install
 }
 
-
-strip_binaries() {
-    local bin_dir="$1"
-    echo "Stripping binaries in $bin_dir..."
-    for binary in "$bin_dir"/*; do
-        [ -f "$binary" ] && "$ZIG_STRIP" "$binary"
-    done
-}
-
 clone_repo "https://github.com/HomuHomu833/zig-as-llvm" "main" "$TOOLCHAIN"
 clone_repo "https://github.com/Kitware/CMake.git" "v$CMAKE_VER" "$ROOT_DIR/cmake-$CMAKE_VER"
 clone_repo "https://github.com/ninja-build/ninja.git" "v$NINJA_VER" "$ROOT_DIR/ninja-$NINJA_VER"
@@ -127,9 +118,6 @@ build_project "CMake" "$ROOT_DIR/cmake-$CMAKE_VER" \
 build_project "Ninja" "$ROOT_DIR/ninja-$NINJA_VER" \
     "$BUILD_DIR/ninja-$CMAKE_VER-$TARGET_TRIPLE" \
     "$BUILD_DIR/binary-ninja-$CMAKE_VER-$TARGET_TRIPLE"
-
-strip_binaries "$BUILD_DIR/binary-cmake-$CMAKE_VER-$TARGET_TRIPLE/bin"
-strip_binaries "$BUILD_DIR/binary-ninja-$CMAKE_VER-$TARGET_TRIPLE/bin"
 
 echo "Merging Ninja with CMake..."
 mkdir -p "$INSTALL_DIR/$CMAKE_VER-$TARGET_TRIPLE"
