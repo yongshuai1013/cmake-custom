@@ -35,6 +35,8 @@ jobs:
             target_arch: armel
           - target_triple: armeb-linux-musleabihf
             target_arch: armhf
+#          - target_triple: hexagon-linux-musl
+#            target_arch: hexagon
           - target_triple: loongarch64-linux-musl
             target_arch: loongarch64
           - target_triple: mips-linux-musleabi
@@ -63,6 +65,14 @@ jobs:
             target_arch: riscv64
           - target_triple: s390x-linux-musl
             target_arch: s390x
+#          - target_triple: thumb-linux-musleabi
+#            target_arch: thumbel
+#          - target_triple: thumb-linux-musleabihf
+#            target_arch: thumbhf
+#          - target_triple: thumbeb-linux-musleabi
+#            target_arch: thumbel
+#          - target_triple: thumbeb-linux-musleabihf
+#            target_arch: thumbhf
           - target_triple: x86-linux-musl
             target_arch: x86
           - target_triple: x86_64-linux-musl
