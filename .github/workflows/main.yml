@@ -87,15 +87,26 @@ jobs:
         with:
           version: "0.14.1"
           use-cache: false
-      - name: Build
-        run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Linux
+      - name: Check and Build
+        id: build-check
+        run: |
+          if curl --head --fail --silent "https://github.com/HomuHomu833/cmake-zig/releases/download/${{ inputs.cmake_version }}/cmake-${{ matrix.target_triple }}.tar.xz"; then
+            echo "Artifact already exists, skipping build."
+            echo "build_skipped=true" >> $GITHUB_OUTPUT
+          else
+            echo "Artifact does not exist, running build..."
+            echo "build_skipped=false" >> $GITHUB_OUTPUT
+            ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Linux
+          fi
       - name: Compress
+        if: steps.build-check.outputs.build_skipped == 'false'
         run: |
           tarball_name=cmake-${{ matrix.target_triple }}
           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${{ inputs.cmake_version }}
           tar -cf - ${{ inputs.cmake_version }} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
       - name: Upload
+        if: steps.build-check.outputs.build_skipped == 'false'
         uses: ncipollo/release-action@v1.16.0
         with:
           tag: "${{ inputs.cmake_version }}"
@@ -130,15 +141,26 @@ jobs:
 #         with:
 #           version: "0.15.0-dev.669+561ab59ce"
 #           use-cache: false
-#       - name: Build
-#         run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} FreeBSD
+#       - name: Check and Build
+#         id: build-check
+#         run: |
+#           if curl --head --fail --silent "https://github.com/HomuHomu833/cmake-zig/releases/download/${{ inputs.cmake_version }}/cmake-${{ matrix.target_triple }}.tar.xz"; then
+#             echo "Artifact already exists, skipping build."
+#             echo "build_skipped=true" >> $GITHUB_OUTPUT
+#           else
+#             echo "Artifact does not exist, running build..."
+#             echo "build_skipped=false" >> $GITHUB_OUTPUT
+#             ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} FreeBSD
+#           fi
 #       - name: Compress
+#         if: steps.build-check.outputs.build_skipped == 'false'
 #         run: |
 #           tarball_name=cmake-${{ matrix.target_triple }}
 #           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
 #           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${{ inputs.cmake_version }}
 #           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
 #       - name: Upload
+#         if: steps.build-check.outputs.build_skipped == 'false'
 #         uses: ncipollo/release-action@v1.16.0
 #         with:
 #           tag: "${{ inputs.cmake_version }}"
@@ -191,15 +213,26 @@ jobs:
 #         with:
 #           version: "0.15.0-dev.669+561ab59ce"
 #           use-cache: false
-#       - name: Build
-#         run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} NetBSD
+#       - name: Check and Build
+#         id: build-check
+#         run: |
+#           if curl --head --fail --silent "https://github.com/HomuHomu833/cmake-zig/releases/download/${{ inputs.cmake_version }}/cmake-${{ matrix.target_triple }}.tar.xz"; then
+#             echo "Artifact already exists, skipping build."
+#             echo "build_skipped=true" >> $GITHUB_OUTPUT
+#           else
+#             echo "Artifact does not exist, running build..."
+#             echo "build_skipped=false" >> $GITHUB_OUTPUT
+#             ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} NetBSD
+#           fi
 #       - name: Compres
+#         if: steps.build-check.outputs.build_skipped == 'false'
 #         run: |
 #           tarball_name=cmake-${{ matrix.target_triple }}
 #           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
 #           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${{ inputs.cmake_version }}
 #           tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
 #       - name: Upload
+#         if: steps.build-check.outputs.build_skipped == 'false'
 #         uses: ncipollo/release-action@v1.16.0
 #         with:
 #           tag: "${{ inputs.cmake_version }}"
@@ -243,15 +276,26 @@ jobs:
           echo "$(pwd)/llvm-mingw-*/bin/${bin} \$@" > windres
           chmod +x windres
           sudo mv windres /usr/bin
-      - name: Build
-        run: ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Windows
+      - name: Check and Build
+        id: build-check
+        run: |
+          if curl --head --fail --silent "https://github.com/HomuHomu833/cmake-zig/releases/download/${{ inputs.cmake_version }}/cmake-${{ matrix.target_triple }}.tar.xz"; then
+            echo "Artifact already exists, skipping build."
+            echo "build_skipped=true" >> $GITHUB_OUTPUT
+          else
+            echo "Artifact does not exist, running build..."
+            echo "build_skipped=false" >> $GITHUB_OUTPUT
+            ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Windows
+          fi
       - name: Compress
+        if: steps.build-check.outputs.build_skipped == 'false'
         run: |
           tarball_name=cmake-${{ matrix.target_triple }}
           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${{ inputs.cmake_version }}
           7z a -snl -t7z -mx=9 -m0=LZMA2 -md=256m -mfb=273 -mtc=on -mmt=on ${tarball_name}.7z ${{ inputs.cmake_version }}
       - name: Upload
+        if: steps.build-check.outputs.build_skipped == 'false'
         uses: ncipollo/release-action@v1.16.0
         with:
           tag: "${{ inputs.cmake_version }}"
