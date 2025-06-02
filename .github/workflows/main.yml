@@ -84,7 +84,7 @@ jobs:
           tarball_name=cmake-${{ matrix.target_triple }}
           echo tarball_name=${tarball_name} >> ${GITHUB_ENV}
           mv install/${{ inputs.cmake_version }}-${{ matrix.target_triple }} ${{ inputs.cmake_version }}
-          tar -cf - ${tarball_name} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
+          tar -cf - ${{ inputs.cmake_version }} | xz -T0 -9e --lzma2=dict=256MiB > ${tarball_name}.tar.xz
       - name: Upload
         uses: ncipollo/release-action@v1.16.0
         with:
