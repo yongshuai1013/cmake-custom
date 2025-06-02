@@ -3,7 +3,7 @@ name: CI
 on:
   workflow_dispatch:
     inputs:
-      cmake_verison:
+      cmake_version:
         description: "CMake Version:"
         default: "4.0.2"
         required: true
