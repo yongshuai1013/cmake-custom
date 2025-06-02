@@ -62,7 +62,6 @@ build_project() {
     local cmake_flags=(
         -DCMAKE_CROSSCOMPILING=True
         -DCMAKE_BUILD_TYPE=MinSizeRel
-        -DBUILD_SHARED_LIBS=OFF
         -DCMAKE_SYSTEM_PROCESSOR="$TARGET_ARCH"
         -DCMAKE_SYSTEM_NAME="$TARGET_OS"
         -DCMAKE_C_COMPILER="$ZIG_CC"
@@ -81,6 +80,7 @@ build_project() {
 
     if [[ "$name" == "CMake" ]]; then
         cmake_flags+=(
+            -DBUILD_SHARED_LIBS=OFF
             -DCMAKE_USE_OPENSSL=OFF
             -DCMAKE_USE_SYSTEM_CURL=OFF
             -DCMAKE_USE_SYSTEM_ZLIB=OFF
