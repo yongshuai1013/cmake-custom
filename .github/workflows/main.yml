@@ -96,6 +96,7 @@ jobs:
           else
             echo "Artifact does not exist, running build..."
             echo "build_skipped=false" >> $GITHUB_OUTPUT
+            cp -R ./patches/zig/* $(whereis zig | awk '{print $2}' | xargs dirname)
             ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Linux
           fi
       - name: Compress
