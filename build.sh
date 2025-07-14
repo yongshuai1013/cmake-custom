@@ -123,6 +123,17 @@ build_project() {
 }
 
 clone_repo "https://github.com/Kitware/CMake.git" "v$CMAKE_VER" "$ROOT_DIR/cmake-$CMAKE_VER"
+sed -i '/auto separator = cm::string_view{/,/}/c\
+    cm::string_view separator;\
+    if (this->RegistryFormat.start(1) == std::string::npos ||\
+        this->RegistryFormat.end(1) == std::string::npos) {\
+      separator = this->Separator;\
+    } else {\
+      separator = cm::string_view{\
+        this->Expression.data() + this->RegistryFormat.start(1),\
+        this->RegistryFormat.end(1) - this->RegistryFormat.start(1)\
+    };\
+}' $ROOT_DIR/cmake-$CMAKE_VER/Source/cmWindowsRegistry.cxx || true
 clone_repo "https://github.com/ninja-build/ninja.git" "v$NINJA_VER" "$ROOT_DIR/ninja-$NINJA_VER"
 
 build_project "CMake" "$ROOT_DIR/cmake-$CMAKE_VER" \
