@@ -81,6 +81,12 @@ build_project() {
     )
 
     if [[ "$name" == "CMake" ]]; then
+        if [ "${TARGET_TRIPLE#mips64}" != "$TARGET_TRIPLE" ];
+            openssl_flag="-DCMAKE_USE_OPENSSL=OFF"
+        else
+            openssl_flag="-DCMAKE_USE_OPENSSL=ON"
+        fi
+
         cmake_flags+=(
             -DBUILD_SHARED_LIBS=OFF
             -DHAVE_POSIX_STRERROR_R=1
@@ -90,7 +96,7 @@ build_project() {
             -DKWSYS_LFS_WORKS__TRYRUN_OUTPUT=""
             -DHAVE_FSETXATTR_5=1
             -DHAVE_FSETXATTR_5__TRYRUN_OUTPUT=""
-            -DCMAKE_USE_OPENSSL=ON
+            "$openssl_flag"
             -DCMAKE_USE_SYSTEM_CURL=OFF
             -DCMAKE_USE_SYSTEM_ZLIB=OFF
             -DCMAKE_USE_SYSTEM_KWIML=OFF
