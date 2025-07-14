@@ -1,0 +1,30 @@
+diff --git a/engines/e_afalg.c b/engines/e_afalg.c
+index 2d16c13..838a77b 100644
+--- a/engines/e_afalg.c
++++ b/engines/e_afalg.c
+@@ -125,7 +125,24 @@ static ossl_inline int io_getevents(aio_context_t ctx, long min, long max,
+                                struct io_event *events,
+                                struct timespec *timeout)
+ {
++#if defined(__NR_io_getevents)
+     return syscall(__NR_io_getevents, ctx, min, max, events, timeout);
++#elif defined(__NR_io_pgetevents_time64)
++    if (sizeof(timeout->tv_sec) == 8)
++        return syscall(__NR_io_pgetevents_time64, ctx, min, max, events, timeout, NULL);
++    else {
++        errno = ENOSYS;
++        return -1;
++    }
++#else
++    return -ENOSYS;
++#endif
+ }
+
+ static void afalg_waitfd_cleanup(ASYNC_WAIT_CTX *ctx, const void *key,
+@@ -858,4 +875,4 @@ static int afalg_destroy(ENGINE *e)
+     return 1;
+ }
+
+-#endif                          /* KERNEL VERSION */
++#endif                          /* KERNEL VERSION */
+\ No newline at end of file
