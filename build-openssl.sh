@@ -34,7 +34,7 @@ cd $ROOT_DIR
 curl -LkSs https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz | gzip -d | tar -x
 mv openssl-1.1.1w openssl
 cd openssl
-patch -p1 < $ROOT_DIR/patches/fix-io_getevents-time64.patch
+patch -p1 < $ROOT_DIR/patches/openssl/fix-io_getevents-time64.patch
 case "$TARGET_TRIPLE" in
     aarch64-linux-musl)      OPENSSL_TARGET="linux-aarch64" ;;
     aarch64_be-linux-musl)   OPENSSL_TARGET="linux-generic64" ;;  # No official support, generic fallback
