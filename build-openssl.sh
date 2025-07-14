@@ -20,7 +20,7 @@ ZIG_C_FLAGS="-fstack-protector-strong -fsanitize=undefined -static"
 ZIG_CXX_FLAGS="$ZIG_C_FLAGS"
 ZIG_LINKER_FLAGS="-static"
 
-if [ "${TARGET_TRIPLE#mips64}" != "$TARGET_TRIPLE" ]; then
+if [[ "$TARGET_TRIPLE" == mips64* ]]; then
   echo "MIPS 64-Bit currently has issues in building OpenSSL. Exiting."
   exit 0
 fi
