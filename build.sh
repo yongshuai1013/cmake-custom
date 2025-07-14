@@ -81,7 +81,7 @@ build_project() {
     )
 
     if [[ "$name" == "CMake" ]]; then
-        if [ "${TARGET_TRIPLE#mips64}" != "$TARGET_TRIPLE" ];
+        if [[ "$TARGET_TRIPLE" == mips64* ]]; then
             openssl_flag="-DCMAKE_USE_OPENSSL=OFF"
         else
             openssl_flag="-DCMAKE_USE_OPENSSL=ON"
