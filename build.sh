@@ -12,6 +12,7 @@ TARGET_TRIPLE="$3"
 TARGET_ARCH="$4"
 TARGET_OS="$5"
 ROOT_DIR="$(pwd)"
+EXTRAS_DIR="$ROOT_DIR/extras"
 BUILD_DIR="$ROOT_DIR/build"
 INSTALL_DIR="$ROOT_DIR/install"
 TOOLCHAIN="$ROOT_DIR/zig-as-llvm"
@@ -62,8 +63,7 @@ build_project() {
     local cmake_flags=(
         -DCMAKE_CROSSCOMPILING=True
         -DCMAKE_BUILD_TYPE=MinSizeRel
-        -D_WIN32_WINNT=0x0600
-        -DNTDDI_VERSION=0x06000000
+        -DCMAKE_PREFIX_PATH="$EXTRAS_DIR"
         -DCMAKE_SYSTEM_PROCESSOR="$TARGET_ARCH"
         -DCMAKE_SYSTEM_NAME="$TARGET_OS"
         -DCMAKE_C_COMPILER="$ZIG_CC"
@@ -90,7 +90,7 @@ build_project() {
             -DKWSYS_LFS_WORKS__TRYRUN_OUTPUT=""
             -DHAVE_FSETXATTR_5=1
             -DHAVE_FSETXATTR_5__TRYRUN_OUTPUT=""
-            -DCMAKE_USE_OPENSSL=OFF
+            -DCMAKE_USE_OPENSSL=ON
             -DCMAKE_USE_SYSTEM_CURL=OFF
             -DCMAKE_USE_SYSTEM_ZLIB=OFF
             -DCMAKE_USE_SYSTEM_KWIML=OFF
