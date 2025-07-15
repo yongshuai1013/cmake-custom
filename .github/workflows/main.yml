@@ -81,12 +81,12 @@ jobs:
           use-cache: false
       - name: Setup Zig toolchain
         run: | 
-          git clone https://github.com/HomuHomu833/zig-as-llvm
+          git clone https://github.com/${{ github.repository_owner }}/zig-as-llvm
           cp -R ${{github.workspace}}/patches/zig/* $(whereis zig | awk '{print $2}' | xargs dirname)
       - name: Check and Build
         id: build-check
         run: |
-          if curl --head --fail --silent "https://github.com/HomuHomu833/cmake-zig/releases/download/${{ inputs.cmake_version }}/cmake-${{ matrix.target_triple }}.tar.xz"; then
+          if curl --head --fail --silent "https://github.com/${{ github.repository_owner }}/cmake-zig/releases/download/${{ inputs.cmake_version }}/cmake-${{ matrix.target_triple }}.tar.xz"; then
             echo "Artifact already exists, skipping build."
             echo "build_skipped=true" >> $GITHUB_OUTPUT
           else
