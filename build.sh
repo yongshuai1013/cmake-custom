@@ -62,7 +62,7 @@ build_project() {
 
     local cmake_flags=(
         -DCMAKE_CROSSCOMPILING=True
-        -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_BUILD_TYPE=MinSizeRel
         -DCMAKE_PREFIX_PATH="$EXTRAS_DIR"
         -DCMAKE_SYSTEM_PROCESSOR="$TARGET_ARCH"
         -DCMAKE_SYSTEM_NAME="$TARGET_OS"
