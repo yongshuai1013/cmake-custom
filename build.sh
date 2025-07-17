@@ -116,7 +116,7 @@ build_project() {
     cmake -B "$build_dir" -S "$src_dir" "${cmake_flags[@]}"
 
     echo "Building $name..."
-    ninja -C "$build_dir" -j12
+    ninja -C "$build_dir" -j$(nproc)
 
     echo "Installing $name..."
     ninja -C "$build_dir" install
@@ -133,7 +133,7 @@ sed -i '/auto separator = cm::string_view{/,/}/c\
         this->Expression.data() + this->RegistryFormat.start(1),\
         this->RegistryFormat.end(1) - this->RegistryFormat.start(1)\
     };\
-}' "$ROOT_DIR/cmake-$CMAKE_VER/Source/cmWindowsRegistry.cxx" || true
+}' "$ROOT_DIR/cmake-$CMAKE_VER/Source/cmWindowsRegistry.cxx" || echo "Never mind."
 clone_repo "https://github.com/ninja-build/ninja.git" "v$NINJA_VER" "$ROOT_DIR/ninja-$NINJA_VER"
 
 build_project "CMake" "$ROOT_DIR/cmake-$CMAKE_VER" \
