@@ -1,1 +1,18 @@
-a
+diff --git a/Source/cmCurl.cxx b/Source/cmCurl.cxx
+index e9772433..f6a25f01 100644
+--- a/Source/cmCurl.cxx
++++ b/Source/cmCurl.cxx
+@@ -124,6 +124,13 @@ std::string cmCurlSetCAInfo(::CURL* curl, std::string const& cafile)
+     ::CURLcode res = ::curl_easy_setopt(curl, CURLOPT_CAPATH, env_ca.c_str());
+     check_curl_result(res, "Unable to set TLS/SSL Verify CAINFO: ");
+   }
++  else if (const char* home = getenv("HOME")) {
++    std::string fallback_ca = std::string(home) + "/../usr/etc/tls/cert.pem";
++    if (cmSystemTools::FileExists(fallback_ca, true)) {
++        ::CURLcode res = ::curl_easy_setopt(curl, CURLOPT_CAINFO, fallback_ca.c_str());
++        check_curl_result(res, "Unable to set TLS/SSL Verify CAINFO: ");
++    }
++  }
+ #ifdef CMAKE_FIND_CAFILE
+ #  define CMAKE_CAFILE_FEDORA "/etc/pki/tls/certs/ca-bundle.crt"
+   else if (cmSystemTools::FileExists(CMAKE_CAFILE_FEDORA, true)) {
