@@ -93,6 +93,7 @@ jobs:
             echo "Artifact does not exist, running build..."
             echo "build_skipped=false" >> $GITHUB_OUTPUT
             ./build-openssl.sh ${{ matrix.target_triple }}
+            sudo rm /usr/bin/f95 /usr/local/bin/swiftc
             ./build.sh ${{ inputs.cmake_version }} ${{ inputs.ninja_version }} ${{ matrix.target_triple }} ${{ matrix.target_arch }} Linux
           fi
       - name: Compress
