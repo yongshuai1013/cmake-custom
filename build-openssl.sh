@@ -15,6 +15,7 @@ ZIG_CXX="$TOOLCHAIN/bin/c++"
 ZIG_LD="$TOOLCHAIN/bin/ld"
 ZIG_OBJCOPY="$TOOLCHAIN/bin/objcopy"
 ZIG_AR="$TOOLCHAIN/bin/ar"
+ZIG_RANLIB="$TOOLCHAIN/bin/ranlib"
 ZIG_STRIP="$TOOLCHAIN/bin/strip"
 ZIG_C_FLAGS="-fstack-protector-strong -fsanitize=undefined -static"
 ZIG_CXX_FLAGS="$ZIG_C_FLAGS"
@@ -66,6 +67,6 @@ case "$TARGET_TRIPLE" in
     x86_64-linux-musl)       OPENSSL_TARGET="linux-x86_64" ;;
     x86_64-linux-muslx32)    OPENSSL_TARGET="linux-x32" ;;
 esac
-CC=$ZIG_CC CXX=$ZIG_CXX ./Configure "$OPENSSL_TARGET" no-shared no-async no-tests no-dso --prefix="$EXTRAS_DIR" --openssldir="$EXTRAS_DIR/etc/ssl"
+CC=$ZIG_CC CXX=$ZIG_CXX RANLIB=$ZIG_RANLIB ./Configure "$OPENSSL_TARGET" no-shared no-async no-tests no-dso --prefix="$EXTRAS_DIR" --openssldir="$EXTRAS_DIR/etc/ssl"
 make -j$(nproc)
 make install_sw
