@@ -39,6 +39,7 @@ cd $ROOT_DIR
 curl -LkSs https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz | gzip -d | tar -x
 mv openssl-1.1.1w openssl
 cd openssl
+sed -i '/^\s*shared_cflag\s*=>\s*"-fPIC",\s*$/d' Configurations/10-main.conf
 patch -p1 < $ROOT_DIR/patches/openssl/fix-io_getevents-time64.patch
 case "$TARGET_TRIPLE" in
     aarch64-linux-musl)      OPENSSL_TARGET="linux-aarch64" ;;
