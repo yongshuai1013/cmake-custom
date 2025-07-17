@@ -67,6 +67,6 @@ case "$TARGET_TRIPLE" in
     x86_64-linux-musl)       OPENSSL_TARGET="linux-x86_64" ;;
     x86_64-linux-muslx32)    OPENSSL_TARGET="linux-x32" ;;
 esac
-CC=$ZIG_CC CXX=$ZIG_CXX RANLIB=$ZIG_RANLIB ./Configure "$OPENSSL_TARGET" no-shared no-async no-tests no-dso --prefix="$EXTRAS_DIR" --openssldir="$EXTRAS_DIR/etc/ssl"
+CC=$ZIG_CC CXX=$ZIG_CXX RANLIB=$ZIG_RANLIB ./Configure "$OPENSSL_TARGET" no-shared no-async no-tests no-dso --prefix="$EXTRAS_DIR" --openssldir="/etc/ssl"
 make -j$(nproc)
 make install_sw
