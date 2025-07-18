@@ -37,24 +37,6 @@ jobs:
             target_arch: armhf
           - target_triple: loongarch64-linux-musl
             target_arch: loongarch64
-          - target_triple: mips-linux-musleabi
-            target_arch: mips
-          - target_triple: mips-linux-musleabihf
-            target_arch: mips
-          - target_triple: mipsel-linux-musleabi
-            target_arch: mipsel
-          - target_triple: mipsel-linux-musleabihf
-            target_arch: mipsel
-          - target_triple: mips64-linux-muslabin32
-            target_arch: mips64
-          - target_triple: mips64el-linux-muslabin32
-            target_arch: mips64el
-          - target_triple: powerpc-linux-musleabi
-            target_arch: powerpc
-          - target_triple: powerpc-linux-musleabihf
-            target_arch: powerpc
-          - target_triple: powerpc64-linux-musl
-            target_arch: powerpc64
           - target_triple: powerpc64le-linux-musl
             target_arch: powerpc64le
           - target_triple: riscv32-linux-musl
@@ -66,8 +48,6 @@ jobs:
           - target_triple: x86-linux-musl
             target_arch: x86
           - target_triple: x86_64-linux-musl
-            target_arch: x86_64
-          - target_triple: x86_64-linux-muslx32
             target_arch: x86_64
     steps:
       - name: Checkout
