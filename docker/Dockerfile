@@ -2,7 +2,7 @@
 # llvm-mingw (windows), and the host tools needed to cross-build CMake / Ninja /
 # OpenSSL, so CI only pulls.
 #
-# Build scripts are NOT copied in — they're bind-mounted from the checkout at run
+# Build scripts are NOT copied in they're bind-mounted from the checkout at run
 # time, so editing scripts/ needs no rebuild.
 #
 #   docker run --rm -v "$PWD:/work" -w /work \
@@ -11,8 +11,8 @@
 #     bash -c 'scripts/build-openssl.sh && scripts/build.sh'
 FROM ubuntu:24.04
 
-ARG ZIG_VERSION=0.17.0-dev.857+2b2b85c5f
-ARG LLVM_MINGW_VERSION=20260505
+ARG ZIG_VERSION=0.17.0-dev.1476+91a29d707
+ARG LLVM_MINGW_VERSION=20260728
 ARG MACOS_SDK_VERSION=15.5
 ARG REPO_OWNER=HomuHomu833
 
@@ -70,7 +70,7 @@ RUN if [ ! -f /opt/.no-zig ]; then \
 ENV PATH="/opt/zig:${PATH}"
 
 # llvm-mingw (windows targets; only x86_64 / aarch64 linux hosts can run it).
-# NOT on PATH — build.sh calls it by absolute path.
+# NOT on PATH, build.sh calls it by absolute path.
 RUN arch="$(uname -m)"; \
     case "$arch" in \
         x86_64|aarch64) \

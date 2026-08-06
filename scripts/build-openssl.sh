@@ -24,7 +24,7 @@ OPENSSL_VERSION="${OPENSSL_VERSION:-3.6.3}"
 # Dispatch on PLATFORM (not the triple) so the toolchain is chosen explicitly.
 # APPLY_PATCHES gates the android source patch; off for windows/macos (the cert
 # bundle is a bionic on-device concern and pulls POSIX dirent code those lack).
-# CC/CXX/AR/RANLIB select the toolchain — AR matters for macOS (ld64 rejects a
+# CC/CXX/AR/RANLIB select the toolchain, AR matters for macOS (ld64 rejects a
 # GNU-format archive, so OpenSSL must use the cctools ar).
 APPLY_PATCHES=1
 SSL_EXTRA=""
@@ -97,7 +97,11 @@ case "$PLATFORM" in
       armeb)           OPENSSL_TARGET="linux-generic32" ;;
       loongarch64)     OPENSSL_TARGET="linux64-loongarch64" ;;
       mips|mipsel)     OPENSSL_TARGET="linux-mips32" ;;
-      mips64|mips64el) OPENSSL_TARGET="linux64-mips64" ;;
+      mips64|mips64el)
+       case "$TARGET" in
+          *n32*) OPENSSL_TARGET="linux-mips64"; SSL_EXTRA="$SSL_EXTRA no-asm" ;;
+          *)     OPENSSL_TARGET="linux64-mips64" ;;
+        esac ;;
       powerpc)         OPENSSL_TARGET="linux-ppc" ;;
       powerpc64)       OPENSSL_TARGET="linux-ppc64" ;;
       powerpc64le)     OPENSSL_TARGET="linux-ppc64le" ;;
@@ -159,6 +163,6 @@ sed -i '/^\s*shared_cflag\s*=>\s*"-fPIC",\s*$/d' Configurations/10-main.conf
 CC="$CC" CXX="$CXX" AR="$AR" RANLIB="$RANLIB" \
   ./Configure "$OPENSSL_TARGET" no-shared no-async no-tests no-dso no-afalgeng $SSL_EXTRA \
     --prefix="$EXTRAS_DIR" --openssldir="/etc/ssl" --libdir=lib
-make -j"$(nproc)"
-make install_sw
+make -j"$(nproc)" build_libs
+make install_dev
 log "Done -> $EXTRAS_DIR"

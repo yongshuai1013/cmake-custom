@@ -63,8 +63,9 @@ case "$PLATFORM" in
     ZIG_STRIP="$TC/bin/llvm-strip"; ZIG_OBJCOPY="$TC/bin/llvm-objcopy"
     TARGET_OS=Linux
     # -I patches/cmake: stub "android_lf.h" libarchive includes under __ANDROID__.
-    ZIG_C_FLAGS="-I$ROOTDIR/patches/cmake"; ZIG_CXX_FLAGS="$ZIG_C_FLAGS"
-    ZIG_LINKER_FLAGS="-static-libstdc++"
+    ZIG_C_FLAGS="-I$ROOTDIR/patches/cmake -include $ROOTDIR/patches/cmake/android_compat.h -static"
+    ZIG_CXX_FLAGS="$ZIG_C_FLAGS"
+    ZIG_LINKER_FLAGS="-static"
     ;;
   macos)
     # macOS via osxcross (cctools-port + clang wrappers carrying the SDK sysroot);
@@ -188,6 +189,10 @@ build_project() {
             -DCMAKE_USE_SYSTEM_LIBUV=OFF -DCMAKE_USE_SYSTEM_FORM=OFF
             -DCMAKE_USE_SYSTEM_CPPDAP=OFF
         )
+        case "$PLATFORM" in
+          android)
+            cmake_flags+=(-DHAVE_FCHDIR=ON -DHAVE_PIPE=ON -DHAVE_POSIX_SPAWNP=ON -DHAVE_FUTIMESAT=OFF -DHAVE_LUTIMES=OFF -DHAVE_NL_LANGINFO=OFF) ;;
+        esac
     fi
     cmake -B "$build_dir" -S "$src_dir" "${cmake_flags[@]}" "${EXTRA_CMAKE[@]}"
     log "Building $name"
@@ -239,6 +244,17 @@ case "$PLATFORM" in
           "$ROOTDIR/cmake-$CMAKE_VERSION/Utilities/cmlibuv/src/unix/netbsd.c" || true
       sed -i '/^[[:space:]]*kvm[[:space:]]*$/d' \
           "$ROOTDIR/cmake-$CMAKE_VERSION/Utilities/cmlibuv/CMakeLists.txt" || true
+      # mips-NetBSD: zig's abilist omits the version-renamed __kevent100/__dup3100
+      # (present for other arches), so cmlibuv's kqueue backend won't link.
+      # Compile a small ABI-matched shim and append it to every exe link.
+      case "$ARCH" in
+        mips*)
+          mkdir -p "$BUILD_DIR"
+          "$ZIG_CC" -Os -c "$ROOTDIR/patches/cmake/netbsd_mips_compat.c" \
+              -o "$BUILD_DIR/netbsd_mips_compat.o"
+          ZIG_LINKER_FLAGS="$ZIG_LINKER_FLAGS $BUILD_DIR/netbsd_mips_compat.o"
+          ;;
+      esac
     fi
     ;;
 esac
@@ -247,14 +263,6 @@ clone_repo "https://github.com/ninja-build/ninja.git" "v$NINJA_VERSION" "$ROOTDI
 build_project CMake "$ROOTDIR/cmake-$CMAKE_VERSION" \
     "$BUILD_DIR/cmake-$CMAKE_VERSION-$TARGET" "$BUILD_DIR/binary-cmake-$CMAKE_VERSION-$TARGET"
 
-# ninja needs posix_spawn (bionic API 28+, we target 25): force-include the shim.
-# Ninja only — for cmake it poisons CHECK_FUNCTION_EXISTS (its `char fchdir();`
-# clashes with the real decl -> HAVE_FCHDIR unset -> libarchive #errors out).
-case "$PLATFORM" in
-  android)
-    ZIG_C_FLAGS="$ZIG_C_FLAGS -include $ROOTDIR/patches/cmake/android_compat.h"
-    ZIG_CXX_FLAGS="$ZIG_C_FLAGS" ;;
-esac
 build_project Ninja "$ROOTDIR/ninja-$NINJA_VERSION" \
     "$BUILD_DIR/ninja-$CMAKE_VERSION-$TARGET" "$BUILD_DIR/binary-ninja-$CMAKE_VERSION-$TARGET"
 
